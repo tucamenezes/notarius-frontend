@@ -34,16 +34,21 @@ export class HomeComponent implements OnInit {
 
     this.urlservice.obtenirUrlRaccourcie(request).subscribe (
       res=> {
-        console.log(res)
+        //console.log(res)
         if (res.status===200) {
           this.url= res.body;
           this.urlRaccourcie = this.path + this.url.cleUrl
         } 
       },
       err=> {
-        console.log(err)
+        //console.log(err)
+        if (err.status===400){
+          //juste pour afficher la message d'erreur
+          this.urlRaccourcie=err.error.message;
+        }
         if (err.status===500){
-
+          //juste pour afficher la message d'erreur
+          this.urlRaccourcie = "Une Erreur s'est produite au serveur. Veuillez Réessayer.";
         }
       });
   
@@ -53,27 +58,39 @@ export class HomeComponent implements OnInit {
 
       let request : UrlPersonalise = {};
       
-      if(url!== undefined && this.urlOriginal !== null && url !== "") {
-
+      if(url!== undefined && url !== null && url !== "") {
+         
          request.cleUrl = url.substring(this.path.length);
-  
-         this.urlservice.obtenirUrlOriginal(request).subscribe (
-         res=> {
-            console.log(res)
-            if (res.status===200) {
-              this.url= res.body;
-              this.urlOriginal = this.url.urlOriginale;    
-              if (this.urlOriginal === undefined || this.urlOriginal === null || this.urlOriginal ===""){
-                this.urlOriginal="Ce n'est pas possible de trouver l'url";
-              }        
-            } 
-          },
-          err=> {
-            console.log(err);
-            if (err.status===500){
-  
-            }
-          });
+         
+         if(request.cleUrl!== undefined && request.cleUrl !== null && request.cleUrl !== "") {
+             
+            this.urlservice.obtenirUrlOriginal(request).subscribe (
+              res=> {
+                  //console.log(res)
+                  if (res.status===200) {
+                      this.url= res.body;
+                      this.urlOriginal = this.url.urlOriginale;    
+                      if (this.urlOriginal === undefined || this.urlOriginal === null || this.urlOriginal ===""){
+                           this.urlOriginal="Ce n'est pas possible de trouver l'url";
+                      }        
+                  }
+
+                },
+                err=> {
+                  //console.log(err);
+                  //console.log(err.error);
+                  if (err.status===400){
+                      //juste pour afficher la message d'erreur
+                      this.urlOriginal=err.error.message;
+                  }
+                  if (err.status===500){
+                      //juste pour afficher la message d'erreur
+                      this.urlOriginal = "Une Erreur s'est produite au serveur. Veuillez Réessayer.";
+                  }
+                 }); 
+          } else {
+            this.urlOriginal="L'url n'est pas valide";
+          }
         }
       }
 

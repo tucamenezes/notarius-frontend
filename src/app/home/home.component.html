@@ -11,9 +11,11 @@
     <button type="submit" id="btnGenererUrlRaccourcie" >Generer Url Raccourcie</button>
   </div>
 
-  <div>
+  <div *ngIf="urlRaccourcie">
       <h2>{{urlRaccourcie}}</h2>
+      <div>Vous pouvez mettre l'url ci-dessus sur le navegateur</div>
   </div>
+  <br>
 
   <div *ngIf="!addForm.form.valid && addForm.submitted">
     <h2>L'url est invalid!</h2>
@@ -22,7 +24,7 @@
 
   <div>
       <label for="url">Entrez un lien generé par le systeme :</label> <br>
-      <input type="url" id="urlCle" name="urlCle" size="35" [(ngModel)]="urlCleGenere" pattern="http://.*" placeholder="http://example.com" (change)="nettoyerReponseUrlComplet()">
+      <input type="text" id="urlCle" name="urlCle" size="35" [(ngModel)]="urlCleGenere"  placeholder="http://example.com" (change)="nettoyerReponseUrlComplet()">
       
       <button type="button" id="btnObtenirUrl" (click)="obtenirUrlOriginal(urlCleGenere)"> Obtenir URL Original</button>
 
